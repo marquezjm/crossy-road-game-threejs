@@ -7,7 +7,13 @@ const clock = new THREE.Clock()
 export function animateVehicles(){
     const delta = clock.getDelta()
 
-    rows.forEach((rowData)=>{
+    rows.forEach((rowData:{
+            type:string,
+            direction:boolean,
+            speed:number,
+            vehicles:{initialTileIndex:number, color:number, ref: THREE.Group | null}[]
+                
+        })=>{
         if(rowData.type === 'car' || rowData.type === 'truck' ){
             const beginningOfRow = (minTileIndex -2)*tileSize
             const endOfRow = (maxTileIndex +2) * tileSize

@@ -4,45 +4,9 @@ import { Tree } from './Tree'
 import { Road } from './Road'
 import { Car } from './Car'
 import { Truck } from './Truck'
+import { generateRows } from '../utilities/generateRow'
 
-export const metadata = [
-    {
-        type: "forest",
-        trees: [
-            {tileIndex: -3, height:50},
-            {tileIndex: 2, height:30},
-            {tileIndex: 5, height:50},
-        ]
-    },
-    {
-        type:'car',
-        direction:false,
-        speed:100,
-        vehicles:[
-            {initialTileIndex:8, color:0xff0000, ref: null as THREE.Group | null},
-            {initialTileIndex:2, color:0xff0000, ref: null as THREE.Group | null},
-            {initialTileIndex:-8, color:0xff0000, ref: null as THREE.Group | null},
-        ]
-    },
-    {
-        type: "forest",
-        trees: [
-            {tileIndex: -3, height:50},
-            {tileIndex: 2, height:30},
-            {tileIndex: 5, height:50},
-        ]
-    },
-    {
-        type:'truck',
-        direction:false,
-        speed:100,
-        vehicles:[
-            {initialTileIndex:-8, color:0x00ff00, ref: null as THREE.Group | null},
-            {initialTileIndex:-4, color:0x00ff00, ref: null as THREE.Group | null},
-            {initialTileIndex:8, color:0x00ff00, ref: null as THREE.Group | null},
-        ]
-    },
-]
+export const metadata:any[] = []
 
 export const map = new THREE.Group()
 
@@ -55,11 +19,17 @@ export function initializeMap(){
 }
 
 export function addRows(){
-    metadata.forEach((rowData,index)=>{
-        const rowIndex = index + 1
+    const newMetaData = generateRows(20)
+
+    const startIndex = metadata.length
+
+    metadata.push(...newMetaData)
+
+    newMetaData.forEach((rowData,index)=>{
+        const rowIndex = startIndex + index + 1
         if(rowData.type === 'forest'){
             const row = Grass(rowIndex)
-            rowData.trees?.forEach(({tileIndex,height})=>{
+            rowData.trees?.forEach(({tileIndex,height}:{tileIndex:number,height:number})=>{
                 const tree = Tree(tileIndex,height)
                 row.add(tree)
             })
@@ -68,7 +38,7 @@ export function addRows(){
 
         if(rowData.type ==='car'){
             const row = Road(rowIndex)
-            rowData.vehicles?.forEach((vehicle)=>{
+            rowData.vehicles?.forEach((vehicle:{initialTileIndex:number, color:number, ref: THREE.Group | null})=>{
                 const car = Car(
                     vehicle.initialTileIndex,
                     rowData.direction,
@@ -81,7 +51,7 @@ export function addRows(){
         }
         if(rowData.type ==='truck'){
             const row = Road(rowIndex)
-            rowData.vehicles?.forEach((vehicle)=>{
+            rowData.vehicles?.forEach((vehicle:{initialTileIndex:number, color:number, ref: THREE.Group | null})=>{
                 const truck = Truck(
                     vehicle.initialTileIndex,
                     rowData.direction,

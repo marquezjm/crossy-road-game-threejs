@@ -5,6 +5,9 @@ import { player } from "./components/Player"
 import { initializeMap, map } from "./components/Map"
 import { DirectionalLight } from "./components/DirectionalLight"
 import { animateVehicles } from "./animateVehicles"
+import './style.css'
+import './collectorsUserInput'
+import { animatePlayer } from "./animatePlayer"
 
 const scene = new THREE.Scene()
 scene.add(player)
@@ -14,10 +17,11 @@ const ambientLight = new THREE.AmbientLight()
 scene.add(ambientLight)
 
 const dirLight = DirectionalLight()
-scene.add(dirLight)
+dirLight.target = player
+player.add(dirLight)
 
 const camera = Camera()
-scene.add(camera)
+player.add(camera)
 
 initializeGame()
 
@@ -30,5 +34,7 @@ renderer.setAnimationLoop(animate)
 
 function animate(){
     animateVehicles()
+    animatePlayer()
+
     renderer.render(scene,camera)
 }
