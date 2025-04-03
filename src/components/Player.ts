@@ -65,4 +65,7 @@ export function stepCompleted(){
     if(direction === 'right') position.currentTile +=1
 
     if(position.currentRow > rows.length -10 ) addRows()
+    
+    const scoreDom = document.getElementById("score")
+    if(scoreDom) scoreDom.innerText = position.currentRow.toString()
 }
